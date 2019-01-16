@@ -1,0 +1,17 @@
+version: "3.5"
+
+networks:
+  frontend:
+    driver: bridge
+    name: proxy
+
+services:
+  proxy:
+    container_name: proxy
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - frontend

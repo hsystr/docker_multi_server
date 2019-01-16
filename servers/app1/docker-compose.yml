@@ -1,0 +1,38 @@
+version: "3.5"
+
+networks:
+  frontend:
+    external:
+      name: proxy
+  backend:
+    driver: bridge
+  db1:
+    external:
+      name: db1
+
+services:
+  php-fpm:
+    build:
+      context: ../../containers/php-fpm/7.0
+    volumes:
+      - ${DOCMENT_ROOT}:/usr/local/apache2/htdocs
+      - /var/run/docker.sock:/var/lib/mysql/mysql.sock:ro
+    networks:
+      - backend
+      - db1
+
+  httpd:
+    container_name: app1
+    build:
+      context: ../../containers/httpd
+    environment:
+      VIRTUAL_HOST: app1.localhost
+    expose:
+      - '8001'
+    volumes:
+      - ${DOCMENT_ROOT}:/usr/local/apache2/htdocs
+    depends_on:
+      - php-fpm
+    networks:
+      - frontend
+      - backend

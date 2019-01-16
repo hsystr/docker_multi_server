@@ -1,0 +1,20 @@
+version: "3.5"
+
+networks:
+  default:
+    driver: bridge
+    name: db2
+
+services:
+  db:
+    container_name: db2
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: db2
+      MYSQL_PASSWORD: test
+    expose:
+      - '3306'
+    ports:
+      - '3326:3306'

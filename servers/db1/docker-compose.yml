@@ -1,0 +1,19 @@
+version: "3.5"
+
+networks:
+  default:
+    driver: bridge
+    name: db1
+
+services:
+  db:
+    container_name: db1
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: db1
+      MYSQL_PASSWORD: test
+    expose:
+      - '3306'
+    ports:
+      - '3316:3306'
