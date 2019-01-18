@@ -1,0 +1,10 @@
+{
+    "name": "app1",
+    "authors": [{
+        "name": "hsystr",
+        "email": "hsystr@gmail.com"
+    }],
+    "require": {
+        "laravel/framework": "5.*"
+    }
+}

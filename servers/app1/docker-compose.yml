@@ -11,6 +11,20 @@ networks:
       name: db1
 
 services:
+  httpd:
+    container_name: app1
+    build:
+      context: ../../containers/httpd
+    environment:
+      VIRTUAL_HOST: app1.localhost
+    volumes:
+      - ${DOCMENT_ROOT}:/usr/local/apache2/htdocs
+    depends_on:
+      - php-fpm
+    networks:
+      - frontend
+      - backend
+
   php-fpm:
     build:
       context: ../../containers/php-fpm/7.0
@@ -21,18 +35,8 @@ services:
       - backend
       - db1
 
-  httpd:
-    container_name: app1
-    build:
-      context: ../../containers/httpd
-    environment:
-      VIRTUAL_HOST: app1.localhost
-    expose:
-      - '8001'
+  composer:
+    image: composer
+    command: install
     volumes:
-      - ${DOCMENT_ROOT}:/usr/local/apache2/htdocs
-    depends_on:
-      - php-fpm
-    networks:
-      - frontend
-      - backend
+      - ${HOST_APP_PATH}:/app
