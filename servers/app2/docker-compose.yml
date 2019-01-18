@@ -14,6 +14,20 @@ networks:
       name: db2
 
 services:
+  httpd:
+    container_name: app2
+    build:
+      context: ../../containers/httpd
+    environment:
+      VIRTUAL_HOST: app2.localhost
+    volumes:
+      - ${DOCMENT_ROOT}:/usr/local/apache2/htdocs
+    depends_on:
+      - php-fpm
+    networks:
+      - frontend
+      - backend
+
   php-fpm:
     build:
       context: ../../containers/php-fpm/7.2
@@ -23,19 +37,3 @@ services:
       - backend
       - db1
       - db2
-
-  httpd:
-    container_name: app2
-    build:
-      context: ../../containers/httpd
-    environment:
-      VIRTUAL_HOST: app2.localhost
-    expose:
-      - '8002'
-    volumes:
-      - ${DOCMENT_ROOT}:/usr/local/apache2/htdocs
-    depends_on:
-      - php-fpm
-    networks:
-      - frontend
-      - backend
