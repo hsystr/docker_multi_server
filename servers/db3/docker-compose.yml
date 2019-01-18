@@ -1,0 +1,52 @@
+version: "3.5"
+
+networks:
+  default:
+    driver: bridge
+    name: db3
+
+services:
+  master:
+    container_name: db3-master
+    image: mysql:5.7
+    command: mysqld --server-id=1 --log-bin=/var/lib/mysql/mysql-bin.log
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      # MYSQL_USER: repl
+      # MYSQL_PASSWORD: repl
+    volumes:
+      - ../.data/db3/master:/var/lib/mysql
+      - ./initdb.master:/docker-entrypoint-initdb.d
+    expose:
+      - '3306'
+    ports:
+      - '3336:3306'
+    # deploy:
+    #   mode: replicated
+    #   replicas: 1
+    #   placement:
+    #     constraints:
+    #       - node.role == worker
+
+  slave:
+    container_name: db3-slave
+    image: mysql:5.7
+    command: mysqld --server-id=2
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      # MYSQL_USER: repl
+      # MYSQL_PASSWORD: repl
+    volumes:
+      - ../.data/db3/slave:/var/lib/mysql
+      - ./initdb.slave:/docker-entrypoint-initdb.d
+    # expose:
+    #   - '3306'
+    ports:
+      - '3337:3306'
+    # deploy:
+    #   mode: global
+    #   placement:
+    #     constraints:
+    #       - node.role == worker
+    depends_on:
+      - master
