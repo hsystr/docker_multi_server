@@ -1,2 +1,2 @@
-GRANT REPLICATION SLAVE ON *.* TO 'root'@'db3-slave' IDENTIFIED BY 'root';
--- GRANT replication slave ON *.* TO 'repl'@'db3-slave';
+CREATE USER repl@'%' IDENTIFIED BY 'repl';
+GRANT REPLICATION SLAVE ON *.* TO repl@'%' IDENTIFIED BY 'repl';
