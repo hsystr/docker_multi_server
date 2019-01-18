@@ -1,0 +1,27 @@
+version: "3.5"
+
+networks:
+  frontend:
+    external:
+      name: proxy
+  backend:
+    driver: bridge
+  db1:
+    external:
+      name: db1
+
+services:
+  golang:
+    image: golang
+    environment:
+      VIRTUAL_HOST: api1.localhost
+    expose:
+      - '8801'
+    ports:
+      - '8801:8801'
+    command: 'go run /app/api.go'
+    volumes:
+      - ${HOST_APP_PATH}:/app
+    networks:
+      - frontend
+      - db1
